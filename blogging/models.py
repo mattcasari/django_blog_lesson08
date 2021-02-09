@@ -1,36 +1,29 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Post(models.Model):
-    # title
-    title = models.CharField(max_length=128)
-    # text
-    text = models.TextField(blank=True)
-    # author
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    # created_date
-    created_date = models.DateTimeField(auto_now_add=True)
-    # modified_date
-    modified_date = models.DateTimeField(auto_now=True)
-    # published_date
-    published_date = models.DateTimeField(blank=True, null=True)
-
-    def __str__(self):
-        return self.title
-
 class Category(models.Model):
-
-    # name
     name = models.CharField(max_length=128)
-
-    # description
     description = models.TextField(blank=True)
-
-    # post
-    posts = models.ManyToManyField(Post, blank=True, related_name='categories')
+    # posts = models.ManyToManyField(Post, blank=True, related_name='categories')
+    class Meta:
+        verbose_name_plural = 'Categories'
 
     def __str__(self):
         return self.name
 
-    class Meta:
-        verbose_name_plural = "Categories"
+
+class Post(models.Model):
+    title = models.CharField(max_length=128)
+    text = models.TextField(blank=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(auto_now=True)
+    published_date = models.DateTimeField(blank=True, null=True)
+    # categories = models.ManyToManyField(Category, blank=True, through='PostCategory')
+    categories = models.ManyToManyField(Category, blank=True, null=True, through='PostCategory')
+    def __str__(self):
+        return self.title
+
+class PostCategory(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    categories = models.ForeignKey(Category, on_delete=models.CASCADE)
