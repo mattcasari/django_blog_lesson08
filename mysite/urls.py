@@ -34,7 +34,7 @@ router.register(r'categories', views.CategoryViewSet)
 
 
 urlpatterns = [
-    path('', include(router.urls)),
+    # path('', include(router.urls)),
     path('', include('blogging.urls')),
     path('polling/', include('polling.urls')),
     path('admin/', admin.site.urls),
